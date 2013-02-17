@@ -1,0 +1,192 @@
+DIV#palette {
+  padding: 5px;
+  width: 120px;
+  border: 1px solid black;
+  float:left;
+}
+
+DIV#stage {
+  padding: 5px;
+  width: 600px;
+  border: 1px solid black;
+  float:right;
+}
+
+DIV#controlBox {
+  padding: 5px;
+  width: 120px;
+  border: 1px solid black;
+  float:left;
+}
+
+DIV#stage > DIV.layer {
+  float: left;
+}
+
+DIV#stage > DIV#layerMap {
+  float: right;
+}
+
+/* square titles */
+.square {
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  background-image: url(redstone.png);
+  height: 60px;
+  width: 60px;
+  cursor: pointer;
+}
+
+.square:before {
+  content: "";
+}
+
+.square:hover:before {
+  background-color: white;
+  text-align: center;
+  border: 1px solid black;
+}
+.square.empty:hover:before { content: "Empty"; }
+.square.block:hover:before { content: "Block"; }
+.square.circuit:hover:before { content: "Circuit"; }
+.square.torch:hover:before { content: "Torch"; }
+.square.pressurePlate:hover:before { content: "Pressure Plate"; }
+.square.lever:hover:before { content: "Lever"; }
+.square.button:hover:before { content: "button"; }
+.square.memoryCell:hover:before { content: "Memory Cell"; }
+.square.repeater:hover:before { content: "Repeater"; }
+.square.noteblock:hover:before { content: "Note Block"; }
+.square.stickyPiston:hover:before { content: "Stick Piston"; }
+.square.piston:hover:before { content: "Piston"; }
+
+/* row 1 off, row 2 on */
+.square.circuit.cross      { background-position: 0px 0px; }
+.square.circuit.vertical   { background-position: -60px 0px; }
+.square.circuit.horizontal { background-position: -120px 0px; }
+.square.circuit.tnorth     { background-position: -180px 0px; }
+.square.circuit.teast      { background-position: -240px 0px; }
+.square.circuit.tsouth     { background-position: -300px 0px; }
+.square.circuit.twest      { background-position: -360px 0px; }
+.square.circuit.cornerNE   { background-position: -420px 0px; }
+.square.circuit.cornerSE   { background-position: -480px 0px; }
+.square.circuit.cornerSW   { background-position: -540px 0px; }
+.square.circuit.cornerNW   { background-position: -600px 0px; }
+.square.torch.center       { background-position: -660px 0px; }
+.square.torch.north        { background-position: -720px 0px; }
+.square.torch.east         { background-position: -780px 0px; }
+.square.torch.south        { background-position: -840px 0px; }
+.square.torch.west         { background-position: -900px 0px; }
+ 
+.square.circuit.cross.powered      { background-position: 0px -60px; }
+.square.circuit.vertical.powered   { background-position: -60px -60px; }
+.square.circuit.horizontal.powered { background-position: -120px -60px; }
+.square.circuit.tnorth.powered     { background-position: -180px -60px; }
+.square.circuit.teast.powered      { background-position: -240px -60px; }
+.square.circuit.tsouth.powered     { background-position: -300px -60px; }
+.square.circuit.twest.powered      { background-position: -360px -60px; }
+.square.circuit.cornerNE.powered   { background-position: -420px -60px; }
+.square.circuit.cornerSE.powered   { background-position: -480px -60px; }
+.square.circuit.cornerSW.powered   { background-position: -540px -60px; }
+.square.circuit.cornerNW.powered   { background-position: -600px -60px; }
+.square.torch.center.powered       { background-position: -660px -60px; }
+.square.torch.north.powered        { background-position: -720px -60px; }
+.square.torch.east.powered         { background-position: -780px -60px; }
+.square.torch.south.powered        { background-position: -840px -60px; }
+.square.torch.west.powered         { background-position: -900px -60px; }
+
+/* row 3 off, row 4 on */
+.square.pressurePlate { background-position: 0px -120px; }
+.square.lever.center  { background-position: -60px -120px; }
+.square.lever.south   { background-position: -120px -120px; }
+.square.lever.west    { background-position: -180px -120px; }
+.square.lever.north   { background-position: -240px -120px; }
+.square.lever.east    { background-position: -300px -120px; }
+.square.button.south  { background-position: -360px -120px; }
+.square.button.west   { background-position: -420px -120px; }
+.square.button.north  { background-position: -480px -120px; }
+.square.button.east   { background-position: -540px -120px; }
+.square.memoryCell    { background-position: -600px -120px; }
+
+.square.pressurePlate.powered { background-position: 0px -180px; }
+.square.lever.center.powered  { background-position: -60px -180px; }
+.square.lever.south.powered   { background-position: -120px -180px; }
+.square.lever.west.powered    { background-position: -180px -180px; }
+.square.lever.north.powered   { background-position: -240px -180px; }
+.square.lever.east.powered    { background-position: -300px -180px; }
+.square.button.south.powered  { background-position: -360px -180px; }
+.square.button.west.powered   { background-position: -420px -180px; }
+.square.button.north.powered  { background-position: -480px -180px; }
+.square.button.east.powered   { background-position: -540px -180px; }
+.square.memoryCell.powered    { background-position: -600px -180px; }
+
+/* row 5 off, row 6 on */
+.square.repeater                       { background-position: 0px -420px; }
+.square.repeater.north[data-delay="1"] { background-position: -0px -240px; }
+.square.repeater.east[data-delay="1"]  { background-position: -60px -240px; }
+.square.repeater.south[data-delay="1"] { background-position: -120px -240px; }
+.square.repeater.west[data-delay="1"]  { background-position: -180px -240px; }
+.square.repeater.north[data-delay="2"] { background-position: -240px -240px; }
+.square.repeater.east[data-delay="2"]  { background-position: -300px -240px; }
+.square.repeater.south[data-delay="2"] { background-position: -360px -240px; }
+.square.repeater.west[data-delay="2"]  { background-position: -420px -240px; }
+.square.repeater.north[data-delay="3"] { background-position: -480px -240px; }
+.square.repeater.east[data-delay="3"]  { background-position: -540px -240px; }
+.square.repeater.south[data-delay="3"] { background-position: -600px -240px; }
+.square.repeater.west[data-delay="3"]  { background-position: -660px -240px; }
+.square.repeater.north[data-delay="4"] { background-position: -720px -240px; }
+.square.repeater.east[data-delay="4"]  { background-position: -780px -240px; }
+.square.repeater.south[data-delay="4"] { background-position: -840px -240px; }
+.square.repeater.west[data-delay="4"]  { background-position: -900px -240px; }
+
+.square.repeater.north[data-delay="1"].powered { background-position: -0px -300px; }
+.square.repeater.east[data-delay="1"].powered  { background-position: -60px -300px; }
+.square.repeater.south[data-delay="1"].powered { background-position: -120px -300px; }
+.square.repeater.west[data-delay="1"].powered  { background-position: -180px -300px; }
+.square.repeater.north[data-delay="2"].powered { background-position: -240px -300px; }
+.square.repeater.east[data-delay="2"].powered  { background-position: -300px -300px; }
+.square.repeater.south[data-delay="2"].powered { background-position: -360px -300px; }
+.square.repeater.west[data-delay="2"].powered  { background-position: -420px -300px; }
+.square.repeater.north[data-delay="3"].powered { background-position: -480px -300px; }
+.square.repeater.east[data-delay="3"].powered  { background-position: -540px -300px; }
+.square.repeater.south[data-delay="3"].powered { background-position: -600px -300px; }
+.square.repeater.west[data-delay="3"].powered  { background-position: -660px -300px; }
+.square.repeater.north[data-delay="4"].powered { background-position: -720px -300px; }
+.square.repeater.east[data-delay="4"].powered  { background-position: -780px -300px; }
+.square.repeater.south[data-delay="4"].powered { background-position: -840px -300px; }
+.square.repeater.west[data-delay="4"].powered  { background-position: -900px -300px; }
+
+/* row 7 & 8 special */
+.square.block     { background-position: 0px -360px; }
+.square.noteblock { background-position: -60px -360px; }
+.square.empty     { background-position: -60px -420px; }
+.square.stickyPiston.up { background-position: -120px -360px; }
+.square.stickyPiston.upExtended { background-position: -120px -420px; }
+.square.stickyPiston.north { background-position: -180px -360px; }
+.square.stickyPiston.northBase { background-position: -420px -420px; }
+.square.stickyPiston.northExtended { background-position: -420px -360px; }
+.square.stickyPiston.east { background-position: -240px -360px; }
+.square.stickyPiston.eastBase { background-position: -180px -420px; }
+.square.stickyPiston.eastExtended { background-position: -240px -420px; }
+.square.stickyPiston.south { background-position: -300px -360px; }
+.square.stickyPiston.southBase { background-position: -420px -360px; }
+.square.stickyPiston.southExtended { background-position: -420px -420px; }
+.square.stickyPiston.west { background-position: -360px -360px; }
+.square.stickyPiston.westBase { background-position: -360px -420px; }
+.square.stickyPiston.westExtended { background-position: -300px -420px; }
+.square.piston.up { background-position: -540px -360px; }
+.square.piston.upExtended { background-position: -540px -420px; }
+.square.piston.north { background-position: -600px -360px; }
+.square.piston.northBase { background-position: -840px -420px; }
+.square.piston.northExtended { background-position: -840px -360px; }
+.square.piston.east { background-position: -660px -360px; }
+.square.piston.eastBase { background-position: -600px -420px; }
+.square.piston.eastExtended { background-position: -660px -420px; }
+.square.piston.south { background-position: -720px -360px; }
+.square.piston.southBase { background-position: -900px -360px; }
+.square.piston.southExtended { background-position: -900px -420px; }
+.square.piston.west { background-position: -780px -360px; }
+.square.piston.westBase { background-position: -780px -420px; }
+.square.piston.westExtended { background-position: -720px -420px; }
+
+/* row 9 & 10 empty */

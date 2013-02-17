@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pallette Test</title>
+<link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
+<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="./main.js"></script>
+</head>
+
+<body>
+
+
+<div id="palette">
+  <h3>Palette</h3>
+  <table cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td><div class="square empty"></div></td>
+      <td><div class="square block"></div></td>
+    </tr>
+    <tr>
+      <td><div class="square circuit cross"></div></td>
+      <td><div class="square torch north source"></div></td>
+    </tr>
+    <tr>
+      <td><div class="square memoryCell source"</div></td>
+      <td><div class="square pressurePlate source"></div></td>
+    </tr>
+    <tr>
+      <td><div class="square lever south source"></div></td>
+      <td><div class="square button south source"></div></td>
+    </tr>
+    <tr>
+      <td><div class="square repeater"></div></td>
+      <td><div class="square noteblock"></div></td>
+    </tr>
+    <tr>
+      <td><div class="square piston up"></div></td>
+      <td><div class="square stickyPiston up"></div></td>
+    </tr>
+  </table>
+</div>
+
+<div id="stage">
+  <h3>Stage</h3>
+  <div class="layer" data-layer="1">
+    <table cellpadding="0" cellspacing="0" border="0">
+    </table>
+  </div>
+  <div id="layerMap">
+    <span>Layer 1</span>
+  </div>
+</div>
+
+<div id="controlBox">
+  <h3>Control box</h3>
+  <button id="flop">Test</button>
+</div>
+
+</body>
+</html>
