@@ -206,3 +206,20 @@ DIV#stage > DIV#layerMap {
 .square[data-type="piston"][data-face="westExtended"] { background-position: -720px -420px; }
 
 /* row 9 & 10 empty */
+/* empty */
+
+/*
+#stage TD {
+  border: 1px solid black;
+  border-collapse: collapse;
+  height: 60px;
+  width: 60px;
+}
+*/
+#stage TD.ui-hover-target {
+  background-color: #2030BB;
+}
+
+#stage TD.ui-hover-target > DIV {
+  display: none;
+}

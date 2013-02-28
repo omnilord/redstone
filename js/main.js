@@ -9,6 +9,7 @@ $(document).ready(function() {
     for (var w = 0; w < width; w++) {
       var $tcell = $(document.createElement("TD")).attr("data-x", w).droppable({
         accept: ".square",
+        hoverClass: "ui-hover-target",
         tolerance: "pointer",
         drop: function(ev, ui) {
           if ($(ui.draggable).hasClass("palette")) {
@@ -19,49 +20,36 @@ $(document).ready(function() {
               var domEl = $el.get(0);
               var redstone;
               switch ($el.attr('data-type')) {
-                case 'empty':
-                  redstone = EmptyBlock(); break;
-                case 'block':
-                  redstone = Block(); break;
-                case 'circuit':
-                  redstone = Circuit(); break;
-                case 'torch':
-                  redstone = Torch(); break;
-                case 'memoryCell':
-                  redstone = MemoryCell(); break;
-                case 'pressurePlate':
-                  redstone = PressurePlate(); break;
-                case 'lever':
-                  redstone = Lever(); break;
-                case 'button':
-                  redstone = Button(); break;
-                case 'repeater':
-                  redstone = Repeater(); break;
-                case 'noteblock':
-                  redstone = NoteBlock(); break;
-                case 'piston':
-                  redstone = Piston(); break;
-                case 'stickyPiston':
-                  redstone = StickyPiston(); break;
+                case 'block': redstone = Block(); break;
+                case 'circuit': redstone = Circuit(); break;
+                case 'torch': redstone = Torch(); break;
+                case 'memoryCell': redstone = MemoryCell(); break;
+                case 'pressurePlate': redstone = PressurePlate(); break;
+                case 'lever': redstone = Lever(); break;
+                case 'button': redstone = Button(); break;
+                case 'repeater': redstone = Repeater(); break;
+                case 'noteblock': redstone = NoteBlock(); break;
+                case 'piston': redstone = Piston(); break;
+                case 'stickyPiston': redstone = StickyPiston(); break;
                 default:
               }
               if (typeof redstone !== "undefined") {
                 $.extend(domEl, redstone);
-                domEl.onDrop();
+                domEl.drop();
               }
+              
+              // Reset the draggable for the new div
               if ($el.attr('data-type') !== 'empty') {
                 $el.draggable({"helper": "clone", "zIndex": 9999});
               }
             }
           } else {
-            var $emptyDiv = $(document.createElement("DIV")).addClass("square").attr('data-type', 'empty');
-            var redstone = EmptyBlock();
-            var domEmptyDiv = $emptyDiv.get(0);
-            $.extend(domEmptyDiv, redstone);
-            $(ui.draggable).closest("TD").empty().append($emptyDiv);
-            if (domEmptyDiv.onDrop) { domEmptyDiv.onDrop(); }
+            var oldCell = $(ui.draggable).closest("TD");
+            var source = ui.draggable.get(0);
+            if (source.leave) { source.leave(); }
             $(this).empty().append(ui.draggable);
-            if (ui.draggable.get(0).onDrop) { ui.draggable.get(0).onDrop(); }
+            if (source.drop) { source.drop(); }
+            $(document.createElement("DIV")).addClass("square").attr('data-type', 'empty').appendTo(oldCell.empty());
           }
         }
       });
@@ -101,20 +89,20 @@ var Component = function(componentExtension) {
       down: undefined
     },
     sources: [], // Which gates are providing power to this circuit
-    onPowerOff: function(fromDirection) {},
-    onPowerOn: function(fromDirection) {},
-    onDrop: function() {
+    powerOff: function(fromDirection) {},
+    powerOn: function(fromDirection) {},
+    drop: function() {
       var $this = $(this);
       var x = parseInt($this.closest("TD").attr("data-x"));
       var y = parseInt($this.closest("TR").attr("data-y"));
       var z = parseInt($this.closest("TABLE").attr("data-z"));
 
-      var north = (typeof this.gates.north !== 'undefined' ? this.gates.north : $('DIV#stage TABLE[data-z="'+z+'"] TR[data-y="'+(y - 1)+'"] > TD[data-x="'+x+'"] > DIV').get(0));
-      var south = (typeof this.gates.south !== 'undefined' ? this.gates.south : $('DIV#stage TABLE[data-z="'+z+'"] TR[data-y="'+(y + 1)+'"] > TD[data-x="'+x+'"] > DIV').get(0));
-      var east  = (typeof this.gates.east  !== 'undefined' ? this.gates.east  : $('DIV#stage TABLE[data-z="'+z+'"] TR[data-y="'+y+'"] > TD[data-x="'+(x + 1)+'"] > DIV').get(0));
-      var west  = (typeof this.gates.west  !== 'undefined' ? this.gates.west  : $('DIV#stage TABLE[data-z="'+z+'"] TR[data-y="'+y+'"] > TD[data-x="'+(x - 1)+'"] > DIV').get(0));
-      var up    = (typeof this.gates.up    !== 'undefined' ? this.gates.up    : $('DIV#stage TABLE[data-z="'+(z - 1)+'"] TR[data-y="'+y+'"] > TD[data-x="'+x+'"] > DIV').get(0));
-      var down  = (typeof this.gates.down  !== 'undefined' ? this.gates.down  : $('DIV#stage TABLE[data-z="'+(z + 1)+'"] TR[data-y="'+y+'"] > TD[data-x="'+x+'"] > DIV').get(0));
+      var north = (typeof this.gates.north !== 'undefined' ? this.gates.north : $('DIV#stage TABLE[data-z="'+z+'"] TR[data-y="'+(y - 1)+'"] > TD[data-x="'+x+'"] > DIV.square:not([data-type="empty"])').get(0));
+      var south = (typeof this.gates.south !== 'undefined' ? this.gates.south : $('DIV#stage TABLE[data-z="'+z+'"] TR[data-y="'+(y + 1)+'"] > TD[data-x="'+x+'"] > DIV.square:not([data-type="empty"])').get(0));
+      var east = (typeof this.gates.east !== 'undefined' ? this.gates.east : $('DIV#stage TABLE[data-z="'+z+'"] TR[data-y="'+y+'"] > TD[data-x="'+(x + 1)+'"] > DIV.square:not([data-type="empty"])').get(0));
+      var west = (typeof this.gates.west !== 'undefined' ? this.gates.west : $('DIV#stage TABLE[data-z="'+z+'"] TR[data-y="'+y+'"] > TD[data-x="'+(x - 1)+'"] > DIV.square:not([data-type="empty"])').get(0));
+      var up = (typeof this.gates.up !== 'undefined' ? this.gates.up : $('DIV#stage TABLE[data-z="'+(z - 1)+'"] TR[data-y="'+y+'"] > TD[data-x="'+x+'"] > DIV.square:not([data-type="empty"])').get(0));
+      var down = (typeof this.gates.down !== 'undefined' ? this.gates.down : $('DIV#stage TABLE[data-z="'+(z + 1)+'"] TR[data-y="'+y+'"] > TD[data-x="'+x+'"] > DIV.square:not([data-type="empty"])').get(0));
       if (typeof north !== "undefined") {
         if (north.addDirection) {
           if (north.addDirection("south", this)) { this.addDirection("north", north); }
@@ -125,25 +113,51 @@ var Component = function(componentExtension) {
           if (south.addDirection("north", this)) { this.addDirection("south", south); }
         }
       }
-      if (typeof east  !== "undefined") {
+      if (typeof east !== "undefined") {
         if (east.addDirection) {
           if (east.addDirection("west", this)) { this.addDirection("east", east); }
         }
       }
-      if (typeof west  !== "undefined") {
+      if (typeof west !== "undefined") {
         if (west.addDirection) {
           if (west.addDirection("east", this)) { this.addDirection("west", west); }
         }
       }
-      if (typeof up    !== "undefined") {
+      if (typeof up !== "undefined") {
         if (up.addDirection) {
           if (up.addDirection("down", this)) { this.addDirection("up", up); }
         }
       }
-      if (typeof down  !== "undefined") {
+      if (typeof down !== "undefined") {
         if (down.addDirection) {
           if (down.addDirection("up", this)) { this.addDirection("down", down); }
         }
+      }
+    },
+    leave: function() {
+      if (typeof this.gates.north !== "undefined") {
+        if (this.gates.north.addDirection) { this.gates.north.addDirection("south", undefined); }
+        this.addDirection("north", undefined);
+      }
+      if (typeof this.gates.south !== "undefined") {
+        if (this.gates.south.addDirection) { this.gates.south.addDirection("north", undefined); }
+        this.addDirection("south", undefined);
+      }
+      if (typeof this.gates.east !== "undefined") {
+        if (this.gates.east.addDirection) { this.gates.east.addDirection("west", undefined); }
+        this.addDirection("east", undefined);
+      }
+      if (typeof this.gates.west !== "undefined") {
+        if (this.gates.west.addDirection) { this.gates.west.addDirection("east", undefined); }
+       this.addDirection("west", undefined);
+      }
+      if (typeof this.gates.up !== "undefined") {
+        if (this.gates.up.addDirection) { this.gates.up.addDirection("down", undefined); }
+        this.addDirection("up", undefined);
+      }
+      if (typeof this.gates.down !== "undefined") {
+        if (this.gates.down.addDirection) { this.gates.down.addDirection("up", undefined); }
+        this.addDirection("down", undefined);
       }
     },
     addDirection: function(direction, which) {
@@ -152,11 +166,10 @@ var Component = function(componentExtension) {
         case "south":
         case "east":
         case "west":
+        case "up":
+        case "down":
           this.gates[direction] = which;
           return this.retile();
-        case "up":
-        case "Down":
-          this.gates[direction] = which;
         default:
       }
       return false;
@@ -173,14 +186,9 @@ var Component = function(componentExtension) {
       this.addDirection(direction, null);
     }
   };
-  $.extend(newComponent, componentExtension);
+  if (typeof componentExtension === "object") { $.extend(newComponent, componentExtension); }
   return newComponent;
 };
-
-var EmptyBlock = function(td) {
-  return new Circuit({
-  });
-}
 
 
 var Block = function() {
@@ -196,8 +204,6 @@ var Circuit = function() {
       var gs = this.gates.south;
       var ge = this.gates.east;
       var gw = this.gates.west;
-      var gu = this.gates.up;
-      var gd = this.gates.down;
       if (gn !== undefined && ge !== undefined && gs !== undefined && gw !== undefined) return "cross";
       if (gn !== undefined && ge !== undefined && gs !== undefined) return "teast";
       if (gn !== undefined && ge !== undefined && gw !== undefined) return "tnorth";
