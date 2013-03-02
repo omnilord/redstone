@@ -1,5 +1,6 @@
 $(document).ready(function() {
-  $("DIV#palette .square").addClass("palette").draggable({"helper": "clone", "zIndex": 9999});
+  var draggableTemplate = {helper: "clone", revert: "invalid", revertDuration: 0, zIndex: 9999};
+  $("DIV#palette .square").addClass("palette").draggable(draggableTemplate);
 
   var width = 10;
   var height = 10;
@@ -8,39 +9,31 @@ $(document).ready(function() {
     var $trow = $(document.createElement("TR")).attr("data-y", h);
     for (var w = 0; w < width; w++) {
       var $tcell = $(document.createElement("TD")).attr("data-x", w).droppable({
-        accept: ".square",
+        accept: function(el) {
+          return ($(this).find(el).length === 0) && (el.hasClass("square"));
+        },
+       
         hoverClass: "ui-hover-target",
         tolerance: "pointer",
         drop: function(ev, ui) {
           if ($(ui.draggable).hasClass("palette")) {
+            var currentComponent = $(this).find('DIV.square');
+            if (currentComponent.leave) { currentComponent.leave(); }
             var $el = ui.draggable.clone();
             $el.removeClass("palette");
             $(this).empty().append($el);
             if ($el.is('[data-type]')) {
               var domEl = $el.get(0);
-              var redstone;
-              switch ($el.attr('data-type')) {
-                case 'block': redstone = Block(); break;
-                case 'circuit': redstone = Circuit(); break;
-                case 'torch': redstone = Torch(); break;
-                case 'memoryCell': redstone = MemoryCell(); break;
-                case 'pressurePlate': redstone = PressurePlate(); break;
-                case 'lever': redstone = Lever(); break;
-                case 'button': redstone = Button(); break;
-                case 'repeater': redstone = Repeater(); break;
-                case 'noteblock': redstone = NoteBlock(); break;
-                case 'piston': redstone = Piston(); break;
-                case 'stickyPiston': redstone = StickyPiston(); break;
-                default:
-              }
+              var dataType = $el.attr('data-type');
+              var redstone = newComponent(dataType);
               if (typeof redstone !== "undefined") {
                 $.extend(domEl, redstone);
                 domEl.drop();
               }
               
               // Reset the draggable for the new div
-              if ($el.attr('data-type') !== 'empty') {
-                $el.draggable({"helper": "clone", "zIndex": 9999});
+              if (dataType !== 'empty') {
+                $el.draggable(draggableTemplate);
               }
             }
           } else {
@@ -78,8 +71,25 @@ $(document).ready(function() {
 // 8. re-route wire as necessary
 
 
+var newComponent = function(componentType) {
+    switch (componentType) {
+      case 'block': return Block();
+      case 'circuit': return Circuit();
+      case 'torch': return Torch();
+      case 'memoryCell': return MemoryCell();
+      case 'pressurePlate': return PressurePlate();
+      case 'lever': return Lever();
+      case 'button': return Button();
+      case 'repeater': return Repeater();
+      case 'noteblock': return NoteBlock();
+      case 'piston': return Piston();
+      case 'stickyPiston': return StickyPiston();
+      default: return undefined;
+    }
+}
+
 var Component = function(componentExtension) {
-  var newComponent = {
+  var component = {
     gates: {
       north: undefined,
       south: undefined,
@@ -149,7 +159,7 @@ var Component = function(componentExtension) {
       }
       if (typeof this.gates.west !== "undefined") {
         if (this.gates.west.addDirection) { this.gates.west.addDirection("east", undefined); }
-       this.addDirection("west", undefined);
+        this.addDirection("west", undefined);
       }
       if (typeof this.gates.up !== "undefined") {
         if (this.gates.up.addDirection) { this.gates.up.addDirection("down", undefined); }
@@ -186,8 +196,8 @@ var Component = function(componentExtension) {
       this.addDirection(direction, null);
     }
   };
-  if (typeof componentExtension === "object") { $.extend(newComponent, componentExtension); }
-  return newComponent;
+  if (typeof componentExtension === "object") { $.extend(component, componentExtension); }
+  return component;
 };
 
 
@@ -215,10 +225,7 @@ var Circuit = function() {
       if (gs !== undefined && ge !== undefined) return "cornerSE";
       if (gn !== undefined || gs !== undefined) return "vertical";
       if (ge !== undefined || gw !== undefined) return "horizontal";
-      return "";
-    },
-    poop: function() {
-      console.log("this is a poop.");
+      return "cross";
     }
   });
 }
